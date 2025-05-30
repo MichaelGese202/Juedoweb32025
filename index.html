@@ -42,17 +42,12 @@
   <div class="header">
     <button class="btn-wallet"><i class="fas fa-wallet"></i> Connect Wallet</button>
   </div>
+  <!-- Sections -->
   <div id="section-home" class="section active">
     <div class="project-image"><img src="imagenes/imagen1.png" alt="QoriFlow Logo"></div>
     <div class="ranking"><i class="fas fa-crown"></i> My Ranking <span>#0</span></div>
-    <div class="stats">
-      <div class="coins">0.<span class="decimal">0000</span> P</div>
-      <div class="apy"><span>APY 0%</span><span>0.00000123 per sec.</span></div>
-    </div>
-    <div class="missions">
-      <h3>Missions</h3>
-      <div id="missions-list"></div>
-    </div>
+    <div class="stats"><div class="coins">0.<span class="decimal">0000</span> P</div><div class="apy"><span>APY 0%</span><span>0.00000123 per sec.</span></div></div>
+    <div class="missions"><h3>Missions</h3><div id="missions-list"></div></div>
   </div>
   <div id="section-rank" class="section"><h3>Rank</h3><p style="text-align:center; margin-top:20px;">Coming soon...</p></div>
   <div id="section-friends" class="section">
@@ -61,10 +56,7 @@
       <div class="friend-card"><i class="fas fa-coins" style="color:#FFC107;"></i><span>Earned Coins:</span><strong id="referral-coins">0</strong></div>
       <div class="friend-card"><i class="fas fa-crown" style="color:#9C27B0;"></i><span>Premium Referrals:</span><strong id="premium-coins">0</strong></div>
     </div>
-    <div class="invite-link">
-      <input type="text" id="invite-link" readonly placeholder="Your invite link" />
-      <button id="copy-btn"><i class="fas fa-copy"></i></button>
-    </div>
+    <div class="invite-link"><input type="text" id="invite-link" readonly placeholder="Your invite link"/><button id="copy-btn"><i class="fas fa-copy"></i></button></div>
   </div>
   <div class="bottom-nav">
     <div class="nav-item active" data-sec="home"><i class="fas fa-home"></i> Home</div>
@@ -72,6 +64,7 @@
     <div class="nav-item" data-sec="friends"><i class="fas fa-users"></i> Friends</div>
   </div>
   <script>
+    // Navigation
     const sections = { home: 'section-home', rank: 'section-rank', friends: 'section-friends' };
     document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', () => {
       document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -79,62 +72,31 @@
       Object.values(sections).forEach(id => document.getElementById(id).classList.remove('active'));
       document.getElementById(sections[item.dataset.sec]).classList.add('active');
     }));
+    // State
     let coins = parseFloat(localStorage.getItem('coins')) || 0;
     let perSec;
-    if (localStorage.getItem('perSec') === null) {
-      perSec = 0.00000123;
-      localStorage.setItem('perSec', perSec);
-    } else {
-      perSec = parseFloat(localStorage.getItem('perSec'));
-    }
-    let friendCount = parseInt(localStorage.getItem('friendCount')) || 0;
-    let referralCoins = parseInt(localStorage.getItem('referralCoins')) || 0;
-    let premiumCoins = parseInt(localStorage.getItem('premiumCoins')) || 0;
+    if (localStorage.getItem('perSec') === null) { perSec = 0.00000123; localStorage.setItem('perSec', perSec); } else { perSec = parseFloat(localStorage.getItem('perSec')); }
+    let friendCount = parseInt(localStorage.getItem('friendCount'))||0;
+    let referralCoins = parseInt(localStorage.getItem('referralCoins'))||0;
+    let premiumCoins = parseInt(localStorage.getItem('premiumCoins'))||0;
     const coinsEl = document.querySelector('.coins');
     const decimalEl = document.querySelector('.decimal');
     const rateEl = document.querySelector('.stats .apy span:last-child');
-    function updateCoins() {
-      localStorage.setItem('coins', coins);
-      const intPart = Math.floor(coins).toLocaleString();
-      const decPart = Math.floor((coins - Math.floor(coins)) * 10000).toString().padStart(4, '0');
-      coinsEl.innerHTML = intPart;
-      decimalEl.textContent = decPart;
-    }
-    function updateRate() {
-      localStorage.setItem('perSec', perSec);
-      rateEl.textContent = perSec.toFixed(8) + ' per sec.';
-    }
-    setInterval(() => { coins += perSec; updateCoins(); }, 1000);
-    const missions = [
-      { id: 'invite-1', title: 'Invite 1 Friends to QoriFlow', link: '', points: 1000, required: 1 },
-      { id: 'invite-3', title: 'Invite 3 Friends to QoriFlow', link: '', points: 3000, required: 3 },
-      { id: 'invite-5', title: 'Invite 5 Friends to QoriFlow', link: '', points: 5000, required: 5 },
-      { id: 'invite-10', title: 'Invite 10 Friends to QoriFlow', link: '', points: 10000, required: 10 },
-      { id: 'airdrop', title: 'Join AirdropsNetworkPro', link: 'https://t.me/airdropsnetworkpro', points: 10000, required: 1 }
+    function updateCoins(){ localStorage.setItem('coins',coins); const i=Math.floor(coins).toLocaleString(), d=Math.floor((coins-Math.floor(coins))*10000).toString().padStart(4,'0'); coinsEl.innerHTML=i; decimalEl.textContent=d; }
+    function updateRate(){ localStorage.setItem('perSec',perSec); rateEl.textContent=perSec.toFixed(8)+' per sec.'; }
+    setInterval(()=>{ coins+=perSec; updateCoins(); },1000);
+    // Missions
+    const missions=[
+      {id:'invite-1',title:'Invite 1 Friends to QoriFlow',link:'',points:1000,required:1},
+      {id:'invite-3',title:'Invite 3 Friends to QoriFlow',link:'',points:3000,required:3},
+      {id:'invite-5',title:'Invite 5 Friends to QoriFlow',link:'',points:5000,required:5},
+      {id:'invite-10',title:'Invite 10 Friends to QoriFlow',link:'',points:10000,required:10},
+      {id:'airdrop',title:'Join AirdropsNetworkPro',link:'https://t.me/airdropsnetworkpro',points:10000,required:1}
     ];
-    function renderMissions() {
-      const list = document.getElementById('missions-list'); list.innerHTML = '';
-      missions.forEach(m => {
-        const done = localStorage.getItem('completed_' + m.id);
-        const eligible = friendCount >= m.required;
-        const card = document.createElement('div'); card.className = 'mission-card';
-        const anchor = document.createElement('a'); anchor.href = m.link || '#'; anchor.target = '_blank'; anchor.textContent = m.title;
-        const p = document.createElement('div'); p.className = 'points'; p.textContent = m.points + ' puntos';
-        const b = document.createElement('button'); b.textContent = done ? 'Done' : (eligible ? 'Claim' : 'Locked'); b.disabled = done || !eligible;
-        b.addEventListener('click', () => { coins += m.points; updateCoins(); perSec += (m.points / 10000) * 0.000012; updateRate(); localStorage.setItem('completed_' + m.id, 'true'); b.textContent = 'Done'; b.disabled = true; });
-        card.append(anchor, p, b); list.append(card);
-      });
-    }
-    const BOT_USERNAME = 'QoriFlowBot';
-    const inviteInput = document.getElementById('invite-link');
-    const copyBtn = document.getElementById('copy-btn');
-    let referralCode = localStorage.getItem('referralCode');
-    if (!referralCode) { referralCode = Math.random().toString(36).slice(2,8).toUpperCase(); localStorage.setItem('referralCode', referralCode); }
-    inviteInput.value = `https://t.me/${BOT_USERNAME}?start=${referralCode}`;
-    copyBtn.disabled = false;
-    copyBtn.addEventListener('click', () => { navigator.clipboard.writeText(inviteInput.value); alert('Referral link copied!'); });
-    copyBtn.addEventListener('dblclick', () => { friendCount++; referralCoins += 2000; localStorage.setItem('friendCount', friendCount); localStorage.setItem('referralCoins', referralCoins); updateFriendStats(); coins += 2000; updateCoins(); renderMissions(); });
-    function updateFriendStats() { document.getElementById('friends-count').textContent = friendCount; document.getElementById('referral-coins').textContent = referralCoins; document.getElementById('premium-coins').textContent = premiumCoins; }
+    function renderMissions(){ const list=document.getElementById('missions-list'); list.innerHTML=''; missions.forEach(m=>{ const done=localStorage.getItem('completed_'+m.id); let eligible; if(m.link){ eligible=localStorage.getItem('clicked_'+m.id)==='true'; } else { eligible=friendCount>=m.required; } const card=document.createElement('div'); card.className='mission-card'; let titleEl;if(m.link){ titleEl=document.createElement('a'); titleEl.href=m.link; titleEl.target='_blank'; titleEl.textContent=m.title; titleEl.addEventListener('click',()=>{ localStorage.setItem('clicked_'+m.id,'true'); renderMissions(); }); } else { titleEl=document.createElement('div'); titleEl.textContent=m.title; } const pts=document.createElement('div'); pts.className='points'; pts.textContent=m.points+' puntos'; const btn=document.createElement('button'); btn.textContent=done?'Done':(eligible?'Claim':'Locked'); btn.disabled=done||!eligible; btn.addEventListener('click',()=>{ coins+=m.points; updateCoins(); perSec+=(m.points/10000)*0.000012; updateRate(); localStorage.setItem('completed_'+m.id,'true'); btn.textContent='Done'; btn.disabled=true; }); card.append(titleEl,pts,btn); list.append(card); }); }
+    // Referral Link
+    const BOT_USERNAME='QoriFlowBot'; const inviteInput=document.getElementById('invite-link'); const copyBtn=document.getElementById('copy-btn'); let referralCode=localStorage.getItem('referralCode'); if(!referralCode){ referralCode=Math.random().toString(36).slice(2,8).toUpperCase(); localStorage.setItem('referralCode',referralCode); } inviteInput.value=`https://t.me/${BOT_USERNAME}?start=${referralCode}`; copyBtn.disabled=false; copyBtn.addEventListener('click',()=>{ navigator.clipboard.writeText(inviteInput.value); alert('Referral link copied!'); }); copyBtn.addEventListener('dblclick',()=>{ friendCount++; referralCoins+=2000; localStorage.setItem('friendCount',friendCount); localStorage.setItem('referralCoins',referralCoins); updateFriendStats(); coins+=2000; updateCoins(); renderMissions(); }); function updateFriendStats(){ document.getElementById('friends-count').textContent=friendCount; document.getElementById('referral-coins').textContent=referralCoins; document.getElementById('premium-coins').textContent=premiumCoins; }
+    // Init
     updateCoins(); updateRate(); renderMissions(); updateFriendStats();
   </script>
 </body>
