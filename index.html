@@ -5,107 +5,330 @@
   <title>QoriFlow UI</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
-    body { background: #000; color: #fff; margin: 0; font-family: Arial, sans-serif; display: flex; flex-direction: column; height: 100vh; }
-    .header { padding: 20px; text-align: center; flex: none; }
-    .btn-wallet { background: #fff; color: #000; border: none; border-radius: 8px; padding: 10px 20px; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; }
-    .btn-wallet i { margin-right: 8px; }
-    .content { flex: 1; overflow-y: auto; }
-    .project-image img { display: block; margin: 20px auto; width: 120px; height: 120px; }
-    .ranking { display: flex; justify-content: center; align-items: center; background: #1a1a1a; border-radius: 8px; padding: 10px 20px; margin: 0 20px 20px; font-size: 14px; opacity: 0.8; }
+    body {
+      background: #000;
+      color: #fff;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .header {
+      padding: 20px;
+      text-align: center;
+      flex: none;
+    }
+    .btn-wallet {
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+    }
+    .btn-wallet i {
+      margin-right: 8px;
+    }
+    .section {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+      padding-top: 20px;
+    }
+    .section.active {
+      display: block;
+    }
+    .project-image img {
+      display: block;
+      margin: 20px auto;
+      width: 120px;
+      height: 120px;
+    }
+    .ranking {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 10px 20px;
+      margin: 0 20px 20px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
     .ranking i { margin-right: 8px; }
     .ranking span { color: #0af; margin-left: 5px; }
-    .stats { background: #1a1a1a; border-radius: 16px; padding: 20px; margin: 0 20px 20px; text-align: center; }
+    .stats {
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 0 20px 20px;
+      text-align: center;
+    }
     .stats .coins { font-size: 32px; font-weight: bold; }
     .stats .decimal { opacity: 0.6; font-size: 24px; }
-    .stats .apy { margin-top: 12px; display: flex; justify-content: space-between; font-size: 14px; opacity: 0.8; }
-    .missions { margin: 0 20px 20px; }
-    .missions h3 { margin-bottom: 10px; }
-    .mission-card { background: #1a1a1a; border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-    .mission-card a { color: #0af; text-decoration: none; flex: 1; }
-    .mission-card .points { margin: 0 10px; font-weight: bold; }
-    .mission-card button { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; background: #0af; color: #000; }
-    .mission-card button:disabled { background: #666; cursor: default; }
-    .rank-section, .friends-section { margin: 0 20px 20px; }
-    .friends-cards { display: flex; flex-direction: column; gap: 10px; max-width: 360px; margin: 20px auto 10px; }
-    .friend-card { background: #1a1a1a; border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; }
-    .friend-card i { font-size: 24px; margin-right: 8px; }
-    .invite-link { display: flex; max-width: 360px; margin: 10px auto 20px; align-items: center; }
-    .invite-link input { flex: 1; padding: 8px; border-radius: 4px; border: none; margin-right: 10px; }
-    .invite-link button { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; background: #0af; color: #000; display: inline-flex; align-items: center; }
-    .bottom-nav { background: #121212; display: flex; justify-content: space-around; padding: 10px 0; flex: none; }
-    .nav-item { color: #666; font-size: 12px; text-align: center; flex: 1; cursor: pointer; }
-    .nav-item.active { color: #fff; }
-    .nav-item i { display: block; font-size: 20px; margin-bottom: 4px; }
+    .stats .apy {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    .missions {
+      margin: 0 20px 20px;
+    }
+    .missions h3 {
+      margin-bottom: 10px;
+    }
+    .mission-card {
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mission-card .points {
+      margin: 0 10px;
+      font-weight: bold;
+    }
+    .mission-card button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #0af;
+      color: #000;
+    }
+    .mission-card button:disabled {
+      background: #666;
+      cursor: default;
+    }
+    .friends-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 360px;
+      margin: 20px auto 10px;
+    }
+    .friend-card {
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .friend-card i {
+      font-size: 24px;
+      margin-right: 8px;
+    }
+    .invite-link {
+      display: flex;
+      max-width: 360px;
+      margin: 10px auto 20px;
+      align-items: center;
+    }
+    .invite-link input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 4px;
+      border: none;
+      margin-right: 10px;
+    }
+    .invite-link button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #0af;
+      color: #000;
+      display: inline-flex;
+      align-items: center;
+    }
+    .bottom-nav {
+      background: #121212;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      flex: none;
+    }
+    .nav-item {
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+      flex: 1;
+      cursor: pointer;
+    }
+    .nav-item.active {
+      color: #fff;
+    }
+    .nav-item i {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <button class="btn-wallet"><i class="fas fa-wallet"></i> Connect Wallet</button>
   </div>
-  <div class="content">
-    <!-- Home Section -->
-    <div id="home" class="section">
-      <div class="project-image"><img src="imagenes/imagen1.png" alt="QoriFlow Logo"></div>
-      <div class="ranking"><i class="fas fa-crown"></i> My Ranking <span>#0</span></div>
-      <div class="stats"><div class="coins">0.<span class="decimal">0000</span> P</div><div class="apy"><span>APY 0%</span><span>0 per sec.</span></div></div>
-      <div class="missions"><h3>Missions</h3><div id="missions-list"></div></div>
+
+  <!-- Home -->
+  <div id="section-home" class="section active">
+    <div class="project-image">
+      <!-- Aquí pon la imagen de tu proyecto -->
+      <img src="imagenes/imagen1.png" alt="QoriFlow Logo">
     </div>
-    <!-- Rank Section -->
-    <div id="rank" class="section" style="display:none;"><div class="rank-section"><h3>Rank</h3><p>Coming soon...</p></div></div>
-    <!-- Friends Section -->
-    <div id="friends" class="section" style="display:none;">
-      <div class="friends-section">
-        <div class="friends-cards">
-          <div class="friend-card"><i class="fas fa-users" style="color:#2196F3;"></i><span>Total Friends:</span><strong id="friends-count">0</strong></div>
-          <div class="friend-card"><i class="fas fa-coins" style="color:#FFC107;"></i><span>Earned Coins from Referral:</span><strong id="referral-coins">0</strong></div>
-          <div class="friend-card"><i class="fas fa-crown" style="color:#9C27B0;"></i><span>Earned Coins from Premium Referrals:</span><strong id="premium-coins">0</strong></div>
-        </div>
-        <div class="invite-link"><input type="text" id="invite-link" readonly placeholder="Your invite link"/><button id="copy-btn"><i class="fas fa-copy"></i></button></div>
-      </div>
+    <div class="ranking"><i class="fas fa-crown"></i> My Ranking <span>#0</span></div>
+    <div class="stats">
+      <div class="coins">0.<span class="decimal">0000</span> P</div>
+      <div class="apy"><span>APY 0%</span><span>0 per sec.</span></div>
+    </div>
+    <div class="missions">
+      <h3>Missions</h3>
+      <div id="missions-list"></div>
     </div>
   </div>
+
+  <!-- Rank -->
+  <div id="section-rank" class="section">
+    <h3>Rank</h3>
+    <p style="text-align:center; margin-top:20px;">Coming soon...</p>
+  </div>
+
+  <!-- Friends -->
+  <div id="section-friends" class="section">
+    <div class="friends-cards">
+      <div class="friend-card"><i class="fas fa-users" style="color:#2196F3;"></i><span>Total Friends:</span><strong id="friends-count">0</strong></div>
+      <div class="friend-card"><i class="fas fa-coins" style="color:#FFC107;"></i><span>Earned Coins:</span><strong id="referral-coins">0</strong></div>
+      <div class="friend-card"><i class="fas fa-crown" style="color:#9C27B0;"></i><span>Premium Referrals:</span><strong id="premium-coins">0</strong></div>
+    </div>
+    <div class="invite-link">
+      <input type="text" id="invite-link" readonly placeholder="Your invite link" />
+      <button id="copy-btn" disabled><i class="fas fa-copy"></i></button>
+    </div>
+  </div>
+
+  <!-- Navigation -->
   <div class="bottom-nav">
     <div class="nav-item active" data-sec="home"><i class="fas fa-home"></i> Home</div>
     <div class="nav-item" data-sec="rank"><i class="fas fa-list-ol"></i> Rank</div>
     <div class="nav-item" data-sec="friends"><i class="fas fa-users"></i> Friends</div>
   </div>
+
   <script>
-    // Navigation
-    document.querySelectorAll('.nav-item').forEach(item=>item.addEventListener('click',()=>{
-      document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
-      item.classList.add('active');
-      document.querySelectorAll('.section').forEach(s=>s.style.display='none');
-      document.getElementById(item.dataset.sec).style.display='block';
-    }));
-    // State Persistence
-    let coins=parseFloat(localStorage.getItem('coins'))||0;
-    let perSec=parseFloat(localStorage.getItem('perSec'))||0;
-    let friendCount=parseInt(localStorage.getItem('friendCount'))||0;
-    let referralCoins=parseInt(localStorage.getItem('referralCoins'))||0;
-    let premiumCoins=parseInt(localStorage.getItem('premiumCoins'))||0;
-    // Elements
-    const coinsEl=document.querySelector('.coins');
-    const decimalEl=document.querySelector('.decimal');
-    const rateEl=document.querySelector('.apy span:last-child');
-    // Update displays
-    function updateCoins(){localStorage.setItem('coins',coins);const i=Math.floor(coins).toLocaleString(),d=Math.floor((coins-Math.floor(coins))*10000).toString().padStart(4,'0');coinsEl.innerHTML=i;decimalEl.textContent=d;}
-    function updateRate(){localStorage.setItem('perSec',perSec);rateEl.textContent=perSec.toFixed(6)+' per sec.';}
-    setInterval(()=>{coins+=perSec;updateCoins();},1000);
-    // Missions
-    const missions=[
-      {id:'invite-1',title:'Invite 1 Friends to QoriFlow',points:1000,required:1},
-      {id:'invite-3',title:'Invite 3 Friends to QoriFlow',points:3000,required:3},
-      {id:'invite-5',title:'Invite 5 Friends to QoriFlow',points:5000,required:5},
-      {id:'invite-10',title:'Invite 10 Friends to QoriFlow',points:10000,required:10}
+    // Sections navigation
+    const sections = { home: 'section-home', rank: 'section-rank', friends: 'section-friends' };
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        Object.values(sections).forEach(id => document.getElementById(id).classList.remove('active'));
+        document.getElementById(sections[item.dataset.sec]).classList.add('active');
+      });
+    });
+
+    // State persistence
+    let coins = parseFloat(localStorage.getItem('coins')) || 0;
+    let perSec = parseFloat(localStorage.getItem('perSec')) || 0;
+    let friendCount = parseInt(localStorage.getItem('friendCount')) || 0;
+    let referralCoins = parseInt(localStorage.getItem('referralCoins')) || 0;
+    let premiumCoins = parseInt(localStorage.getItem('premiumCoins')) || 0;
+
+    // UI elements
+    const coinsEl = document.querySelector('.stats .coins');
+    const decimalEl = document.querySelector('.stats .decimal');
+    const apyEl = document.querySelector('.stats .apy span:first-child');
+    const rateEl = document.querySelector('.stats .apy span:last-child');
+    const inviteInput = document.getElementById('invite-link');
+    const copyBtn = document.getElementById('copy-btn');
+
+    // Update functions
+    function updateCoins() {
+      localStorage.setItem('coins', coins);
+      const integer = Math.floor(coins).toLocaleString();
+      const decimal = Math.floor((coins - Math.floor(coins)) * 10000).toString().padStart(4, '0');
+      coinsEl.innerHTML = integer;
+      decimalEl.textContent = decimal;
+    }
+    function updateRate() {
+      localStorage.setItem('perSec', perSec);
+      rateEl.textContent = `${perSec.toFixed(6)} per sec.`;
+      apyEl.textContent = `APY ${Math.round(perSec * 100)}%`;
+    }
+    function updateFriendStats() {
+      document.getElementById('friends-count').textContent = friendCount;
+      document.getElementById('referral-coins').textContent = referralCoins;
+      document.getElementById('premium-coins').textContent = premiumCoins;
+    }
+
+    // Auto farm
+    setInterval(() => { coins += perSec; updateCoins(); }, 1000);
+
+    // Missions setup
+    const missions = [
+      { id: 'invite-1', title: 'Invite 1 Friends to QoriFlow', points: 1000,     required: 1 },
+      { id: 'invite-3', title: 'Invite 3 Friends to QoriFlow', points: 3000,     required: 3 },
+      { id: 'invite-5', title: 'Invite 5 Friends to QoriFlow', points: 5000,     required: 5 },
+      { id: 'invite-10',title: 'Invite 10 Friends to QoriFlow',points:10000,required:10 }
     ];
-    function renderMissions(){const list=document.getElementById('missions-list');list.innerHTML='';missions.forEach(m=>{const done=localStorage.getItem('completed_'+m.id),eligible=friendCount>=m.required;const card=document.createElement('div');card.className='mission-card';const t=document.createElement('div');t.textContent=m.title;const p=document.createElement('div');p.className='points';p.textContent=m.points+' puntos';const b=document.createElement('button');b.textContent=done?'Done':(eligible?'Claim':'Locked');b.disabled=done||!eligible;b.addEventListener('click',()=>{coins+=m.points;updateCoins();perSec+=(m.points/10000)*0.000012;updateRate();localStorage.setItem('completed_'+m.id,'true');b.textContent='Done';b.disabled=true;});card.append(t,p,b);list.append(card);});}
-    // Friends & Referral
-    document.querySelector('.btn-wallet').addEventListener('click',()=>{const code=Math.random().toString(36).slice(2,8).toUpperCase();document.getElementById('invite-link').value='https://t.me/your_bot?start='+code;alert('Wallet connected! Code: '+code);});
-    document.getElementById('copy-btn').addEventListener('click',()=>{navigator.clipboard.writeText(document.getElementById('invite-link').value);alert('Link copied!');});
-    document.getElementById('copy-btn').addEventListener('dblclick',()=>{friendCount++;referralCoins+=2000;localStorage.setItem('friendCount',friendCount);localStorage.setItem('referralCoins',referralCoins);coins+=2000;updateCoins();updateFriendStats();renderMissions();});
-    function updateFriendStats(){document.getElementById('friends-count').textContent=friendCount;document.getElementById('referral-coins').textContent=referralCoins;document.getElementById('premium-coins').textContent=premiumCoins;}
-    // Init
-    renderMissions();updateCoins();updateRate();updateFriendStats();
+    function renderMissions() {
+      const list = document.getElementById('missions-list'); list.innerHTML = '';
+      missions.forEach(m => {
+        const done = localStorage.getItem('completed_' + m.id);
+        const eligible = friendCount >= m.required;
+        const card = document.createElement('div'); card.className = 'mission-card';
+        const title = document.createElement('div'); title.textContent = m.title;
+        const pts = document.createElement('div'); pts.className = 'points'; pts.textContent = m.points + ' puntos';
+        const btn = document.createElement('button');
+        btn.textContent = done ? 'Done' : (eligible ? 'Claim' : 'Locked');
+        btn.disabled = done || !eligible;
+        btn.addEventListener('click', () => {
+          coins += m.points; updateCoins();
+          perSec += (m.points / 10000) * 0.000012; updateRate();
+          localStorage.setItem('completed_' + m.id, 'true');
+          btn.textContent = 'Done'; btn.disabled = true;
+        });
+        card.append(title, pts, btn); list.append(card);
+      });
+    }
+
+    // Referral link logic
+    const BOT_USERNAME = 'QoriFlowBot';
+    let referralCode = '';
+    copyBtn.disabled = true;
+
+    document.querySelector('.btn-wallet').addEventListener('click', () => {
+      referralCode = Math.random().toString(36).slice(2, 8).toUpperCase();
+      inviteInput.value = `https://t.me/${BOT_USERNAME}?start=${referralCode}`;
+      copyBtn.disabled = false;
+      alert('Wallet connected! Your referral link is ready.');
+    });
+
+    copyBtn.addEventListener('click', () => {
+      if (inviteInput.value) {
+        navigator.clipboard.writeText(inviteInput.value);
+        alert('Referral link copied to clipboard!');
+      }
+    });
+
+    // Simulate referral registration on double-click
+    copyBtn.addEventListener('dblclick', () => {
+      friendCount++; referralCoins += 2000;
+      localStorage.setItem('friendCount', friendCount);
+      localStorage.setItem('referralCoins', referralCoins);
+      updateFriendStats();
+      coins += 2000; updateCoins(); renderMissions();
+    });
+
+    // Initialize UI
+    updateCoins(); updateRate(); renderMissions(); updateFriendStats();
   </script>
 </body>
 </html>
